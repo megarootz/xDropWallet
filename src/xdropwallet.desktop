@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=xDrop Wallet
+Comment=xDrop Wallet
+Exec=xdropwallet
+Terminal=false
+Type=Application
+Icon=xDrop
+MimeType=x-scheme-handler/xdropwallet;
+Categories=Office;Finance;

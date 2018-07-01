@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AddressBookFrame</class>
+ <widget class="QFrame" name="AddressBookFrame">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>874</width>
+    <height>585</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Frame</string>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::StyledPanel</enum>
+  </property>
+  <property name="frameShadow">
+   <enum>QFrame::Raised</enum>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTreeView" name="m_addressBookView">
+     <property name="autoScrollMargin">
+      <number>0</number>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QTreeView::item:selected
+ {
+     background-color: purple;
+     color: white;
+ }
+QTreeView {
+    outline:none;
+} 
+</string>
+     </property>     
+     <property name="indentation">
+      <number>0</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="m_addAddressButton">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property> 
+       <property name="text">
+        <string> New Contact</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
+         <normaloff>:/icons/contact-new</normaloff>:/icons/contact-new</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_deleteAddressButton">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>         
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string> Delete</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
+         <normaloff>:/icons/contact-del</normaloff>:/icons/contact-del</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_copyAddressButton">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property> 
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string> Copy Address</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
+         <normaloff>:/icons/copy</normaloff>:/icons/copy</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_payAddressButton">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property> 
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string> Send Coins</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
+         <normaloff>:/icons/send</normaloff>:/icons/send</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_msgAddressButton">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property> 
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string> Send Message</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
+         <normaloff>:/icons/send_message</normaloff>:/icons/send_message</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../resources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>m_addAddressButton</sender>
+   <signal>clicked()</signal>
+   <receiver>AddressBookFrame</receiver>
+   <slot>addClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>53</x>
+     <y>556</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>436</x>
+     <y>292</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_deleteAddressButton</sender>
+   <signal>clicked()</signal>
+   <receiver>AddressBookFrame</receiver>
+   <slot>deleteClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>148</x>
+     <y>556</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>436</x>
+     <y>292</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_copyAddressButton</sender>
+   <signal>clicked()</signal>
+   <receiver>AddressBookFrame</receiver>
+   <slot>copyClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>243</x>
+     <y>556</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>436</x>
+     <y>292</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_payAddressButton</sender>
+   <signal>clicked()</signal>
+   <receiver>AddressBookFrame</receiver>
+   <slot>payClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>243</x>
+     <y>556</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>436</x>
+     <y>292</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_msgAddressButton</sender>
+   <signal>clicked()</signal>
+   <receiver>AddressBookFrame</receiver>
+   <slot>msgClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>243</x>
+     <y>556</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>436</x>
+     <y>292</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>addClicked()</slot>
+  <slot>deleteClicked()</slot>
+  <slot>copyClicked()</slot>
+  <slot>payClicked()</slot>
+  <slot>msgClicked()</slot>
+ </slots>
+</ui>

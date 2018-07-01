@@ -1,0 +1,36 @@
+// Copyright (c) 2011-2016 The Cryptonote developers
+// Copyright (c) 2015-2016 XDN developers
+// Copyright (c) 2018-2019 xDrop developers
+// Distributed under the MIT/X11 software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#pragma once
+
+#include <QDialog>
+
+namespace Ui {
+class NewAddressDialog;
+}
+
+namespace WalletGui {
+
+class NewAddressDialog : public QDialog {
+  Q_OBJECT
+  Q_DISABLE_COPY(NewAddressDialog)
+
+public:
+  NewAddressDialog(QWidget* _parent);
+  ~NewAddressDialog();
+
+  QString getAddress() const;
+  QString getLabel() const;
+
+  void setAddress(QString _address) const;
+  void setLabel(QString _label) const;
+
+
+private:
+  QScopedPointer<Ui::NewAddressDialog> m_ui;
+};
+
+}

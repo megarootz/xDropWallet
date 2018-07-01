@@ -1,0 +1,121 @@
+{
+  // See https://go.microsoft.com//fwlink//?linkid=834763 for more information about this file.
+  "configurations": [
+    {
+      "name": "x86-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [ "msvc_x86" ],
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
+      "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "BOOST_ROOT",
+          "value": "C:\\boost_1_65_1_x86"
+        },
+        {
+          "name": "Qt5Gui_DIR",
+          "value": "C:\\Qt\\5.10.1\\msvc2015\\lib\\cmake\\Qt5Gui"
+        },
+        {
+          "name": "Qt5Widgets_DIR",
+          "value": "C:\\Qt\\5.10.1\\msvc2015\\lib\\cmake\\Qt5Widgets"
+        },
+        {
+          "name": "Qt5Network_DIR",
+          "value": "C:\\Qt\\5.10.1\\msvc2015\\lib\\cmake\\Qt5Network"
+        }
+      ]
+    },
+    {
+      "name": "x86-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "inheritEnvironments": [ "msvc_x86" ],
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
+      "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "BOOST_ROOT",
+          "value": "C:\\boost_1_65_1_x86"
+        },
+        {
+          "name": "Qt5Gui_DIR",
+          "value": "C:\\Qt\\5.10.1\\msvc2015\\lib\\cmake\\Qt5Gui"
+        },
+        {
+          "name": "Qt5Widgets_DIR",
+          "value": "C:\\Qt\\5.10.1\\msvc2015\\lib\\cmake\\Qt5Widgets"
+        },
+        {
+          "name": "Qt5Network_DIR",
+          "value": "C:\\Qt\\5.10.1\\msvc2015\\lib\\cmake\\Qt5Network"
+        }
+      ]
+    },
+    {
+      "name": "x64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
+      "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "BOOST_ROOT",
+          "value": "C:\\boost_1_65_1_64"
+        },
+        {
+          "name": "Qt5Gui_DIR",
+          "value": "C:\\Qt\\5.10.1\\msvc2017_64\\lib\\cmake\\Qt5Gui"
+        },
+        {
+          "name": "Qt5Widgets_DIR",
+          "value": "C:\\Qt\\5.10.1\\msvc2017_64\\lib\\cmake\\Qt5Widgets"
+        },
+        {
+          "name": "Qt5Network_DIR",
+          "value": "C:\\Qt\\5.10.1\\msvc2017_64\\lib\\cmake\\Qt5Network"
+        }
+      ]
+    },
+    {
+      "name": "x64-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
+      "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "BOOST_ROOT",
+          "value": "C:\\boost_1_65_1_64"
+        },
+        {
+          "name": "Qt5Gui_DIR",
+          "value": "C:\\Qt\\5.10.1\\msvc2017_64\\lib\\cmake\\Qt5Gui"
+        },
+        {
+          "name": "Qt5Widgets_DIR",
+          "value": "C:\\Qt\\5.10.1\\msvc2017_64\\lib\\cmake\\Qt5Widgets"
+        },
+        {
+          "name": "Qt5Network_DIR",
+          "value": "C:\\Qt\\5.10.1\\msvc2017_64\\lib\\cmake\\Qt5Network"
+        }
+      ]
+    }
+  ]
+}

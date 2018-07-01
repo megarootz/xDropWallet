@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SendMessageFrame</class>
+ <widget class="QFrame" name="SendMessageFrame">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>773</width>
+    <height>575</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Frame</string>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::NoFrame</enum>
+  </property>
+  <property name="frameShadow">
+   <enum>QFrame::Raised</enum>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QScrollArea" name="m_messageAddressScrollArea">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <layout class="QVBoxLayout" name="m_addressesLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="gridLayout">
+     <property name="topMargin">
+      <number>5</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Fee:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="m_feeSpin">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property> 
+       <property name="decimals">
+        <number>7</number>
+       </property>
+       <property name="minimum">
+        <double>0.0100000</double>
+       </property>
+       <property name="maximum">
+        <double>9990.0000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.0100000</double>
+       </property>
+       <property name="value">
+        <double>0.0000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_addRecipientButton">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>         
+       <property name="toolTip">
+        <string>Add Recipient</string>
+       </property>
+       <property name="text">
+        <string> Add Recipient</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
+         <normaloff>:/icons/add</normaloff>:/icons/add</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Message:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextEdit" name="m_messageTextEdit">
+     <property name="placeholderText">
+      <string>Enter your message here...</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QCheckBox" name="m_addReplyToCheck">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property> 
+       <property name="text">
+        <string>Allow replies</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>       
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="rightMargin">
+      <number>10</number>
+     </property>
+     <item>
+      <widget class="QCheckBox" name="m_ttlCheck">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property> 
+       <property name="toolTip">
+        <string>Save encrypted message on the blockchain</string>
+       </property>
+       <property name="text">
+        <string>Save encrypted message on the blockchain</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>       
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Available Balance:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="m_balanceLabel">
+       <property name="text">
+        <string notr="true">0.00 </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="m_tickerLabel">
+       <property name="text">
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_clearAllButton">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property> 
+       <property name="toolTip">
+        <string>Clear All</string>
+       </property>
+       <property name="text">
+        <string> Clear All</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
+         <normaloff>:/icons/remove</normaloff>:/icons/remove</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_sendButton">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>         
+       <property name="toolTip">
+        <string>Send</string>
+       </property>
+       <property name="text">
+        <string> Send</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources.qrc">
+         <normaloff>:/icons/send</normaloff>:/icons/send</iconset>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>       
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../resources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>m_sendButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SendMessageFrame</receiver>
+   <slot>sendClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>58</x>
+     <y>503</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>386</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_messageTextEdit</sender>
+   <signal>textChanged()</signal>
+   <receiver>SendMessageFrame</receiver>
+   <slot>messageTextChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>386</x>
+     <y>227</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>386</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_addRecipientButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SendMessageFrame</receiver>
+   <slot>addRecipientClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>179</x>
+     <y>546</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>386</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_ttlCheck</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>SendMessageFrame</receiver>
+   <slot>ttlCheckStateChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>89</x>
+     <y>426</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>386</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_clearAllButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SendMessageFrame</receiver>
+   <slot>reset()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>154</x>
+     <y>561</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>432</x>
+     <y>294</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>addressBookClicked()</slot>
+  <slot>pasteClicked()</slot>
+  <slot>sendClicked()</slot>
+  <slot>addressEdited(QString)</slot>
+  <slot>messageTextChanged()</slot>
+  <slot>addRecipientClicked()</slot>
+  <slot>ttlCheckStateChanged(int)</slot>
+  <slot>reset()</slot>
+ </slots>
+</ui>

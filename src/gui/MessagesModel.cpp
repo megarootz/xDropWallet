@@ -271,11 +271,17 @@ QVariant MessagesModel::getDisplayRole(const QModelIndex& _index) const {
   case COLUMN_HAS_REPLY_TO:
     return !_index.data(ROLE_FROM_ADDRESS).toString().isEmpty();
   
-  case COLUMN_FROM: 
-    return _index.data(ROLE_FROM_LABEL).toString();
+  case COLUMN_FROM:{ 
+    QPixmap pixmap(":icons/anon");
+    return _index.data(ROLE_FROM_LABEL).toString().size() ? _index.data(ROLE_FROM_LABEL).toString() : 
+    QString("-");
+  }
 
-  case COLUMN_TO:
-    return _index.data(ROLE_TO_LABEL).toString();
+  case COLUMN_TO:{
+    QPixmap pixmap(":icons/anon");
+    return _index.data(ROLE_TO_LABEL).toString().size() ? _index.data(ROLE_TO_LABEL).toString() : 
+    QString("-");
+  }
 
   default:
     break;
@@ -288,11 +294,11 @@ QVariant MessagesModel::getDisplayRole(const QModelIndex& _index) const {
 QVariant MessagesModel::getDecorationRole(const QModelIndex& _index) const {
   switch(_index.column()) {
   case COLUMN_FROM: {
-    if (!_index.data(ROLE_FROM_LABEL).toString().size()){
-      QPixmap pixmap(":icons/anon");
-      return pixmap.scaled(32, 32, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    }
-    return QVariant();
+    //if (!_index.data(ROLE_FROM_LABEL).toString().size()){
+      //QPixmap pixmap(":icons/anon");
+      //return pixmap.scaled(32, 32, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    //}
+    //return QVariant();
     /*
     QLabel* messageLabel = new QLabel();
     messageLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);

@@ -50,7 +50,7 @@
         <file alias="anon">icons/icon_anon.png</file>
     </qresource>
     <qresource prefix="/images">
-        <file alias="splash">images/splash.png</file>
+        <file alias="splash">images/splash.svg</file>
         <file alias="cryptonote">images/cryptonote.png</file>
         <file alias="logo">images/logo.png</file>
         <file alias="logo2">images/logo2.png</file>

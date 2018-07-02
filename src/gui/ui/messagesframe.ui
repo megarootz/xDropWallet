@@ -73,6 +73,7 @@ QTableView::item:selected
 
 QTableView::item:selected:active {
     background-color:purple;
+    color: white;
     outline:none;
     border:none;
 } 

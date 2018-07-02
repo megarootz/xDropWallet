@@ -18,7 +18,7 @@
 namespace WalletGui {
 
 Q_DECL_CONSTEXPR int DEFAULT_MIXIN = 0;
-Q_DECL_CONSTEXPR quint64 COMMENT_CHAR_PRICE = 100000;
+Q_DECL_CONSTEXPR quint64 COMMENT_CHAR_PRICE = 100;
 
 SendFrame::SendFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::SendFrame) {
   m_ui->setupUi(this);

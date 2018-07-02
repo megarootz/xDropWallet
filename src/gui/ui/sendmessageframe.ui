@@ -77,13 +77,13 @@
         <number>7</number>
        </property>
        <property name="minimum">
-        <double>0.0100000</double>
+        <double>0.0000100</double>
        </property>
        <property name="maximum">
-        <double>9990.0000000</double>
+        <double>1000000.0000000</double>
        </property>
        <property name="singleStep">
-        <double>0.0100000</double>
+        <double>0.0000100</double>
        </property>
        <property name="value">
         <double>0.0000000</double>

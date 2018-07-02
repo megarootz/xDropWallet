@@ -57,7 +57,6 @@
 }
 QTableView::item:selected
  {
-     background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ccc, stop: 1 #eee);
      background-color:#eee;
      color: black;
      border:none;
@@ -73,7 +72,7 @@ QTableView::item:selected
  }
 
 QTableView::item:selected:active {
-    background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ccc, stop: 1 #eee);
+    background-color:purple;
     outline:none;
     border:none;
 } 

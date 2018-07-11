@@ -19,7 +19,7 @@ TransactionsListModel::~TransactionsListModel() {
 
 bool TransactionsListModel::filterAcceptsColumn(int _sourceColumn, const QModelIndex& _sourceParent) const {
   quint32 column = sourceModel()->headerData(_sourceColumn, Qt::Horizontal, TransactionsModel::ROLE_COLUMN).toUInt();
-  return column == TransactionsModel::COLUMN_STATE || column == TransactionsModel::COLUMN_DATE ||
+  return column == TransactionsModel::COLUMN_STATE || column == TransactionsModel::COLUMN_DATE || column == TransactionsModel::COLUMN_STATUS ||
     column == TransactionsModel::COLUMN_AMOUNT || column == TransactionsModel::COLUMN_HASH;
 }
 

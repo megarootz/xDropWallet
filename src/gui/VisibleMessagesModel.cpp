@@ -23,14 +23,17 @@ bool VisibleMessagesModel::filterAcceptsColumn(int _sourceColumn, const QModelIn
 
 bool VisibleMessagesModel::filterAcceptsRow(int _sourceRow, const QModelIndex& _sourceParent) const {
 
-	QString type = sourceModel()->data( sourceModel()->index(_sourceRow, 0, _sourceParent) ).toString();
-	bool isSent = (type == "Sent");
-	QString from = sourceModel()->data( sourceModel()->index(_sourceRow, 2, _sourceParent) ).toString();
-	bool isSpam = !(from.size() > 0);
+	//QString type = sourceModel()->data( sourceModel()->index(_sourceRow, 0, _sourceParent) ).toString();
+	//bool isSent = (type == "Sent");
+	//QString from = sourceModel()->data( sourceModel()->index(_sourceRow, 2, _sourceParent) ).toString();
+	//bool isSpam = !(from.size() > 0);
 	//return !isSent && !isSpam;
 	//return !isSpam;
-	return 1;
+	//return 1;
 
+	QString status = sourceModel()->data( sourceModel()->index(_sourceRow, 2, _sourceParent) ).toString();
+	bool isActive = (status == "Active");
+	return isActive;
 }
 
 

@@ -12,6 +12,7 @@
 #include "MainWindow.h"
 #include "WalletAdapter.h"
 #include "WalletEvents.h"
+#include "NodeAdapter.h"
 
 #include "ui_depositsframe.h"
 
@@ -55,6 +56,7 @@ DepositsFrame::DepositsFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::D
   m_ui->m_amountSpin->setMinimum(CurrencyAdapter::instance().formatAmount(CurrencyAdapter::instance().getDepositMinAmount()).toDouble());
   m_ui->m_amountSpin->setDecimals(CurrencyAdapter::instance().getNumberOfDecimalPlaces());
   m_ui->m_depositView->setModel(m_depositModel.data());
+  m_ui->m_depositView->sortByColumn(5, Qt::SortOrder::AscendingOrder); //COLUMN_UNLOCK_HEIGHT, ascending
 
   m_ui->m_tickerLabel1->setText(CurrencyAdapter::instance().getCurrencyTicker().toUpper());
   m_ui->m_tickerLabel2->setText(CurrencyAdapter::instance().getCurrencyTicker().toUpper());
@@ -65,6 +67,8 @@ DepositsFrame::DepositsFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::D
     this, &DepositsFrame::actualDepositBalanceUpdated, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletPendingDepositBalanceUpdatedSignal,
     this, &DepositsFrame::pendingDepositBalanceUpdated, Qt::QueuedConnection);
+  connect(&WalletAdapter::instance(), &WalletAdapter::walletActualBalanceUpdatedSignal,
+    this, &DepositsFrame::walletActualBalanceUpdated, Qt::QueuedConnection);
   connect(&WalletAdapter::instance(), &WalletAdapter::walletCloseCompletedSignal, this, &DepositsFrame::reset,
     Qt::QueuedConnection);
 
@@ -86,6 +90,10 @@ void DepositsFrame::pendingDepositBalanceUpdated(quint64 _balance) {
   m_ui->m_totalDepositLabel->setText(CurrencyAdapter::instance().formatAmount(_balance + actualDepositBalance));
 }
 
+void DepositsFrame::walletActualBalanceUpdated(quint64 _balance) {
+  m_ui->m_balanceLabel->setText(CurrencyAdapter::instance().formatAmount(_balance));
+}
+
 void DepositsFrame::reset() {
   actualDepositBalanceUpdated(0);
   pendingDepositBalanceUpdated(0);
@@ -105,7 +113,7 @@ void DepositsFrame::depositClicked() {
 void DepositsFrame::depositParamsChanged() {
   quint64 amount = CurrencyAdapter::instance().parseAmount(m_ui->m_amountSpin->cleanText());
   quint32 term = m_ui->m_timeSpin->value();
-  quint64 interest = CurrencyAdapter::instance().calculateInterest(amount, term);
+  quint64 interest = CurrencyAdapter::instance().calculateInterest(amount, term, NodeAdapter::instance().getLastKnownBlockHeight());
   qreal rate = DepositModel::calculateRate(amount, interest, term);
   m_ui->m_interestLabel->setText(QString("+ %1 %2 (%3 %)").arg(CurrencyAdapter::instance().formatAmount(interest)).
     arg(CurrencyAdapter::instance().getCurrencyTicker().toUpper()).arg(QString::number(rate * 100, 'f', 2)));

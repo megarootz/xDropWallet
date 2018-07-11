@@ -22,7 +22,7 @@ namespace WalletGui {
 
 Q_DECL_CONSTEXPR quint64 MESSAGE_AMOUNT = UINT64_C(100);
 Q_DECL_CONSTEXPR quint64 MESSAGE_CHAR_PRICE = UINT64_C(100);
-Q_DECL_CONSTEXPR quint64 MINIMAL_MESSAGE_FEE = MESSAGE_CHAR_PRICE;
+Q_DECL_CONSTEXPR quint64 MINIMAL_MESSAGE_FEE = 0;
 Q_DECL_CONSTEXPR int DEFAULT_MESSAGE_MIXIN = 0;
 
 Q_DECL_CONSTEXPR quint32 MINUTE_SECONDS = 60;
@@ -33,8 +33,8 @@ Q_DECL_CONSTEXPR int TTL_STEP = 5 * MINUTE_SECONDS;
 
 SendMessageFrame::SendMessageFrame(QWidget* _parent) : QFrame(_parent), m_ui(new Ui::SendMessageFrame) {
   m_ui->setupUi(this);
-  m_ui->m_feeSpin->setMinimum(CurrencyAdapter::instance().formatAmount(MESSAGE_AMOUNT + MINIMAL_MESSAGE_FEE).toDouble());
-  m_ui->m_feeSpin->setValue(m_ui->m_feeSpin->minimum());
+  //m_ui->m_feeSpin->setMinimum(CurrencyAdapter::instance().formatAmount(MESSAGE_AMOUNT + MINIMAL_MESSAGE_FEE).toDouble());
+  //m_ui->m_feeSpin->setValue(m_ui->m_feeSpin->minimum());
   
   connect(&WalletAdapter::instance(), &WalletAdapter::walletActualBalanceUpdatedSignal, this, &SendMessageFrame::walletActualBalanceUpdated,
     Qt::QueuedConnection);
@@ -53,7 +53,7 @@ SendMessageFrame::~SendMessageFrame() {
 }
 
 void SendMessageFrame::setAddress(const QString& _address) {
-  m_ui->m_feeSpin->setValue(MESSAGE_AMOUNT + MINIMAL_MESSAGE_FEE);
+  //m_ui->m_feeSpin->setValue(MESSAGE_AMOUNT + MINIMAL_MESSAGE_FEE);
   m_ui->m_messageTextEdit->clear();
   for (MessageAddressFrame* addressFrame : m_addressFrames) {
     delete addressFrame;
@@ -114,10 +114,11 @@ void SendMessageFrame::recalculateFeeValue() {
   quint64 fee = MESSAGE_AMOUNT * m_addressFrames.size();
   if (m_ui->m_ttlCheck->checkState() == Qt::Checked) {
     fee += MINIMAL_MESSAGE_FEE + messageSize * MESSAGE_CHAR_PRICE;
+  }else{
+    fee = MINIMAL_MESSAGE_FEE;
   }
 
   m_ui->m_feeSpin->setMinimum(CurrencyAdapter::instance().formatAmount(fee).toDouble());
-
   m_ui->m_feeSpin->setValue(m_ui->m_feeSpin->minimum());
 }
 
@@ -200,12 +201,13 @@ void SendMessageFrame::sendClicked() {
   }
 
   quint64 fee = CurrencyAdapter::instance().parseAmount(m_ui->m_feeSpin->cleanText());
-  fee -= MESSAGE_AMOUNT * transfers.size();
-  if (fee > CurrencyAdapter::instance().parseAmount(m_ui->m_balanceLabel->text()) ||  CurrencyAdapter::instance().parseAmount(m_ui->m_balanceLabel->text()) < MESSAGE_AMOUNT * transfers.size()) {
-    QCoreApplication::postEvent(&MainWindow::instance(), new ShowMessageEvent(tr("Insufficient funds.\r\n\nAsk someone to send you coins or use your CPU to mine for new ones."), QtCriticalMsg));
-    return;
+  if (m_ui->m_ttlCheck->checkState() == Qt::Checked) {
+    fee -= MESSAGE_AMOUNT * transfers.size();
+    if (fee > CurrencyAdapter::instance().parseAmount(m_ui->m_balanceLabel->text()) ||  CurrencyAdapter::instance().parseAmount(m_ui->m_balanceLabel->text()) < MESSAGE_AMOUNT * transfers.size()) {
+      QCoreApplication::postEvent(&MainWindow::instance(), new ShowMessageEvent(tr("Insufficient funds.\r\n\nAsk someone to send you coins or use your CPU to mine for new ones."), QtCriticalMsg));
+      return;
+    }
   }
-
 
   quint64 ttl = 0;
   if (m_ui->m_ttlCheck->checkState() == Qt::Unchecked) {
@@ -218,7 +220,7 @@ void SendMessageFrame::sendClicked() {
   }
 
   if (WalletAdapter::instance().isOpen()) {
-    WalletAdapter::instance().sendMessage(transfers, fee, 0, messages, ttl);
+    WalletAdapter::instance().sendMessage(transfers, fee, 2, messages, ttl);
   }
 }
 

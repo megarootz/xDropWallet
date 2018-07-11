@@ -12,6 +12,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "../cryptonote/src/CryptoNoteCore/TransactionExtra.h"
+
 #include "CurrencyAdapter.h"
 #include "NodeAdapter.h"
 #include "MessagesModel.h"
@@ -21,14 +23,21 @@
 #include "MainWindow.h"
 #include "Settings.h"
 
+
 namespace WalletGui {
 
 enum class MessageType : quint8 {INPUT, OUTPUT};
+enum class WalletLegacyTransactionState : uint8_t {Active, Deleted, Sending, Cancelled, Failed};
+
+struct TransactionExtraTTL {
+  uint64_t ttl;
+};
 
 const int MESSAGES_MODEL_COLUMN_COUNT =
   MessagesModel::staticMetaObject.enumerator(MessagesModel::staticMetaObject.indexOfEnumerator("Columns")).keyCount();
 
 const QString MessagesModel::HEADER_FROM_KEY = "From";
+const QString MessagesModel::HEADER_TTL_KEY = "TTL";
 
 MessagesModel& MessagesModel::instance() {
   static MessagesModel inst;
@@ -85,6 +94,8 @@ QVariant MessagesModel::headerData(int _section, Qt::Orientation _orientation, i
       return tr("Height");
     case COLUMN_MESSAGE:
       return tr("Message");
+    case COLUMN_STATE:
+      return tr("Status");
     case COLUMN_HASH:
       return tr("Transaction hash");
     case COLUMN_AMOUNT:
@@ -168,11 +179,17 @@ QVariant MessagesModel::data(const QModelIndex& _index, int _role) const {
       return messageFont;
       }
       
-
       case COLUMN_MESSAGE: {
       QFont messageFont;
       messageFont.setPointSize(9);
       messageFont.setFamily("Lato");
+      return messageFont;
+      }
+
+      case COLUMN_STATE: {
+      QFont messageFont;
+      messageFont.setPointSize(8);
+      messageFont.setFamily("Lato Light");
       return messageFont;
       }
 
@@ -271,6 +288,9 @@ QVariant MessagesModel::getDisplayRole(const QModelIndex& _index) const {
   case COLUMN_HAS_REPLY_TO:
     return !_index.data(ROLE_FROM_ADDRESS).toString().isEmpty();
   
+  case COLUMN_STATE:
+    return _index.data(ROLE_STATE).toString();
+  
   case COLUMN_FROM:{ 
     QPixmap pixmap(":icons/anon");
     return _index.data(ROLE_FROM_LABEL).toString().size() ? _index.data(ROLE_FROM_LABEL).toString() : 
@@ -357,6 +377,27 @@ QVariant MessagesModel::getUserRole(const QModelIndex& _index, int _role, Crypto
 
       case ROLE_ROW:
         return _index.row();
+
+      case ROLE_STATE:{
+          WalletLegacyTransactionState transactionState = static_cast<WalletLegacyTransactionState>(_transaction.state);
+          if (transactionState == WalletLegacyTransactionState::Active) {
+            return QString("Active");
+          }
+          else if (transactionState == WalletLegacyTransactionState::Deleted) {
+            return QString("Deleted");
+          } 
+          else if (transactionState == WalletLegacyTransactionState::Sending) {
+            return QString("Sending");
+          } 
+          else if (transactionState == WalletLegacyTransactionState::Cancelled) {
+            return QString("Cancelled");
+          }
+          else if (transactionState == WalletLegacyTransactionState::Failed) {
+            return QString("Failed");
+          } else {
+            return QString("Pending");
+          }
+      }
 
       case ROLE_FROM_LABEL: {
         if(WalletAdapter::instance().getAddress() == _index.data(ROLE_FROM_ADDRESS).toString()){
@@ -528,6 +569,9 @@ void MessagesModel::updateWalletTransaction(CryptoNote::TransactionId _id) {
 //  quint32 firstRow = m_transactionRow.value(_id).first;
 //  quint32 lastRow = firstRow + m_transactionRow.value(_id).second - 1;
   //Q_EMIT dataChanged(index(firstRow, COLUMN_DATE), index(lastRow, COLUMN_HEIGHT));
+  if(rowCount() > 0) {
+    Q_EMIT dataChanged(index(0, COLUMN_DATE), index(rowCount() - 1, COLUMN_HEIGHT));
+  }
 }
 
 void MessagesModel::lastKnownHeightUpdated(quint64 _height) {

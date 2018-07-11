@@ -10,6 +10,7 @@
 #include <QPixmap>
 #include <QTextStream>
 
+
 #include "CurrencyAdapter.h"
 #include "Message.h"
 #include "NodeAdapter.h"
@@ -19,6 +20,7 @@
 namespace WalletGui {
 
 enum class TransactionType : quint8 {MINED, INPUT, OUTPUT, INOUT, DEPOSIT};
+enum class WalletLegacyTransactionState : uint8_t {Active, Deleted, Sending, Cancelled, Failed};
 
 const int TRANSACTIONS_MODEL_COLUMN_COUNT =
   TransactionsModel::staticMetaObject.enumerator(TransactionsModel::staticMetaObject.indexOfEnumerator("Columns")).keyCount();
@@ -108,6 +110,8 @@ QVariant TransactionsModel::headerData(int _section, Qt::Orientation _orientatio
       return tr("PaymentID");
     case COLUMN_MESSAGE:
       return tr("Message");
+    case COLUMN_STATUS:
+      return tr("Status");
     default:
       break;
     }
@@ -265,6 +269,9 @@ QVariant TransactionsModel::getDisplayRole(const QModelIndex& _index) const {
     return messageStream.readLine();
   }
 
+  case COLUMN_STATUS:
+    return _index.data(ROLE_STATE).toString();  
+
   default:
     break;
   }
@@ -323,100 +330,124 @@ QVariant TransactionsModel::getUserRole(const QModelIndex& _index, int _role, Cr
   const CryptoNote::WalletLegacyTransaction& _transaction, CryptoNote::TransferId _transferId, const CryptoNote::WalletLegacyTransfer& _transfer,
   CryptoNote::DepositId _depositId, const CryptoNote::Deposit& _deposit) const {
   switch(_role) {
-  case ROLE_DATE:
-    return (_transaction.timestamp > 0 ? QDateTime::fromTime_t(_transaction.timestamp) : QDateTime());
+    case ROLE_DATE:
+      return (_transaction.timestamp > 0 ? QDateTime::fromTime_t(_transaction.timestamp) : QDateTime());
 
-  case ROLE_TYPE: {
-    QString transactionAddress = _index.data(ROLE_ADDRESS).toString();
-    if(_transaction.isCoinbase) {
-      return static_cast<quint8>(TransactionType::MINED);
-    } else if (_transaction.firstDepositId != CryptoNote::WALLET_LEGACY_INVALID_DEPOSIT_ID) {
-      return static_cast<quint8>(TransactionType::DEPOSIT);
-    } else if (!transactionAddress.compare(WalletAdapter::instance().getAddress())) {
-      return static_cast<quint8>(TransactionType::INOUT);
-    } else if(_transaction.totalAmount < 0) {
-      return static_cast<quint8>(TransactionType::OUTPUT);
-    }
-
-    return static_cast<quint8>(TransactionType::INPUT);
-  }
-
-  case ROLE_HASH:
-    return QByteArray(reinterpret_cast<const char*>(&_transaction.hash), sizeof(_transaction.hash));
-
-  case ROLE_ADDRESS:
-    return QString::fromStdString(_transfer.address);
-
-  case ROLE_AMOUNT: {
-    TransactionType transactionType = static_cast<TransactionType>(_index.data(ROLE_TYPE).value<quint8>());
-    if (transactionType == TransactionType::INPUT || transactionType == TransactionType::MINED) {
-      return static_cast<qint64>(_transaction.totalAmount);
-    } else if (transactionType == TransactionType::OUTPUT || transactionType == TransactionType::INOUT) {
-      if (_transferId == CryptoNote::WALLET_LEGACY_INVALID_TRANSFER_ID) {
-        return static_cast<qint64>(_transaction.totalAmount);
+    case ROLE_TYPE: {
+      QString transactionAddress = _index.data(ROLE_ADDRESS).toString();
+      if(_transaction.isCoinbase) {
+        return static_cast<quint8>(TransactionType::MINED);
+      } else if (_transaction.firstDepositId != CryptoNote::WALLET_LEGACY_INVALID_DEPOSIT_ID) {
+        return static_cast<quint8>(TransactionType::DEPOSIT);
+      } else if (!transactionAddress.compare(WalletAdapter::instance().getAddress())) {
+        return static_cast<quint8>(TransactionType::INOUT);
+      } else if(_transaction.totalAmount < 0) {
+        return static_cast<quint8>(TransactionType::OUTPUT);
       }
 
-      return static_cast<qint64>(-_transfer.amount);
-    } else if (transactionType == TransactionType::DEPOSIT) {
-      return static_cast<qint64>(-(_transaction.fee + _deposit.amount));
+      return static_cast<quint8>(TransactionType::INPUT);
     }
 
-    return QVariant();
-  }
+    case ROLE_HASH:
+      return QByteArray(reinterpret_cast<const char*>(&_transaction.hash), sizeof(_transaction.hash));
 
-  case ROLE_PAYMENT_ID:
-    return NodeAdapter::instance().extractPaymentId(_transaction.extra);
+    case ROLE_ADDRESS:
+      return QString::fromStdString(_transfer.address);
 
-  case ROLE_ICON: {
-    TransactionType transactionType = static_cast<TransactionType>(_index.data(ROLE_TYPE).value<quint8>());
-    return getTransactionIcon(transactionType);
-  }
+    case ROLE_AMOUNT: {
+      TransactionType transactionType = static_cast<TransactionType>(_index.data(ROLE_TYPE).value<quint8>());
+      if (transactionType == TransactionType::INPUT || transactionType == TransactionType::MINED) {
+        return static_cast<qint64>(_transaction.totalAmount);
+      } else if (transactionType == TransactionType::OUTPUT || transactionType == TransactionType::INOUT) {
+        if (_transferId == CryptoNote::WALLET_LEGACY_INVALID_TRANSFER_ID) {
+          return static_cast<qint64>(_transaction.totalAmount);
+        }
 
-  case ROLE_TRANSACTION_ID:
-    return QVariant::fromValue(_transactionId);
+        return static_cast<qint64>(-_transfer.amount);
+      } else if (transactionType == TransactionType::DEPOSIT) {
+        return static_cast<qint64>(-(_transaction.fee + _deposit.amount));
+      }
 
-  case ROLE_HEIGHT:
-    return static_cast<quint64>(_transaction.blockHeight);
-
-  case ROLE_FEE:
-    return static_cast<quint64>(_transaction.fee);
-
-  case ROLE_NUMBER_OF_CONFIRMATIONS:
-    return (_transaction.blockHeight == CryptoNote::WALLET_LEGACY_UNCONFIRMED_TRANSACTION_HEIGHT ? 0 :
-      NodeAdapter::instance().getLastKnownBlockHeight() - _transaction.blockHeight + 1);
-
-  case ROLE_COLUMN:
-    return headerData(_index.column(), Qt::Horizontal, ROLE_COLUMN);
-
-  case ROLE_ROW:
-    return _index.row();
-
-  case ROLE_MESSAGE: {
-    if (_transaction.messages.size() == 0) {
       return QVariant();
     }
 
-    QString messageString = Message(QString::fromStdString(_transaction.messages[0])).getMessage();
-    QTextStream messageStream(&messageString);
-    return messageStream.readLine();
-  }
+    case ROLE_PAYMENT_ID:
+      return NodeAdapter::instance().extractPaymentId(_transaction.extra);
 
-  case ROLE_MESSAGES: {
-    QStringList messageList;
-    messageList.reserve(_transaction.messages.size());
-    Q_FOREACH (const auto& message, _transaction.messages) {
-      messageList << QString::fromStdString(message);
+    case ROLE_ICON: {
+      TransactionType transactionType = static_cast<TransactionType>(_index.data(ROLE_TYPE).value<quint8>());
+      return getTransactionIcon(transactionType);
     }
 
-    return messageList;
+    case ROLE_TRANSACTION_ID:
+      return QVariant::fromValue(_transactionId);
+
+    case ROLE_HEIGHT:
+      return static_cast<quint64>(_transaction.blockHeight);
+
+    case ROLE_FEE:
+      return static_cast<quint64>(_transaction.fee);
+
+    case ROLE_NUMBER_OF_CONFIRMATIONS:
+      return (_transaction.blockHeight == CryptoNote::WALLET_LEGACY_UNCONFIRMED_TRANSACTION_HEIGHT ? 0 :
+        NodeAdapter::instance().getLastKnownBlockHeight() - _transaction.blockHeight + 1);
+
+    case ROLE_COLUMN:
+      return headerData(_index.column(), Qt::Horizontal, ROLE_COLUMN);
+
+    case ROLE_ROW:
+      return _index.row();
+
+    case ROLE_MESSAGE: {
+      if (_transaction.messages.size() == 0) {
+        return QVariant();
+      }
+
+      QString messageString = Message(QString::fromStdString(_transaction.messages[0])).getMessage();
+      QTextStream messageStream(&messageString);
+      return messageStream.readLine();
+    }
+
+    case ROLE_MESSAGES: {
+      QStringList messageList;
+      messageList.reserve(_transaction.messages.size());
+      Q_FOREACH (const auto& message, _transaction.messages) {
+        messageList << QString::fromStdString(message);
+      }
+
+      return messageList;
+    }
+
+    case ROLE_DEPOSIT_ID:
+      return static_cast<quintptr>(_transaction.firstDepositId);
+
+    case ROLE_DEPOSIT_COUNT:
+      return static_cast<quintptr>(_transaction.depositCount);
+
+    case ROLE_STATE: {
+        WalletLegacyTransactionState transactionState = static_cast<WalletLegacyTransactionState>(_transaction.state);
+        if (transactionState == WalletLegacyTransactionState::Active) {
+          return QString("Active");
+        }
+        else if (transactionState == WalletLegacyTransactionState::Deleted) {
+          return QString("Deleted");
+        } 
+        else if (transactionState == WalletLegacyTransactionState::Sending) {
+          return QString("Sending");
+        } 
+        else if (transactionState == WalletLegacyTransactionState::Cancelled) {
+          return QString("Cancelled");
+        }
+        else if (transactionState == WalletLegacyTransactionState::Failed) {
+          return QString("Failed");
+        }
+      return QString("Pending");
+    }
   }
 
-  case ROLE_DEPOSIT_ID:
-    return static_cast<quintptr>(_transaction.firstDepositId);
 
-  case ROLE_DEPOSIT_COUNT:
-    return static_cast<quintptr>(_transaction.depositCount);
-  }
+
+
 
   return QVariant();
 }

@@ -324,7 +324,10 @@ void WalletAdapter::sendMessage(const QVector<CryptoNote::WalletLegacyTransfer>&
   Q_CHECK_PTR(m_wallet);
   try {
     lock();
-    m_sentMessageId = m_wallet->sendTransaction(_transfers.toStdVector(), _fee, "", _mixin, 0, _messages.toStdVector(), _ttl);
+    if (_ttl > 0) 
+      m_sentMessageId = m_wallet->sendTransaction(_transfers.toStdVector(), 0, "", _mixin, 0, _messages.toStdVector(), _ttl);
+    else
+       m_sentMessageId = m_wallet->sendTransaction(_transfers.toStdVector(), _fee, "", _mixin, 0, _messages.toStdVector(), _ttl);
     Q_EMIT walletStateChangedSignal(tr("Sending messages"));
   } catch (std::system_error&) {
     unlock();

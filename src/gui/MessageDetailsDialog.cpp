@@ -26,6 +26,7 @@ MessageDetailsDialog::MessageDetailsDialog(const QModelIndex& _index, QWidget* _
   m_dataMapper.addMapping(m_ui->m_heightLabel, MessagesModel::COLUMN_HEIGHT, "text");
   m_dataMapper.addMapping(m_ui->m_hashLabel, MessagesModel::COLUMN_HASH, "text");
   m_dataMapper.addMapping(m_ui->m_amountLabel, MessagesModel::COLUMN_AMOUNT, "text");
+  m_dataMapper.addMapping(m_ui->m_statusLabel, MessagesModel::COLUMN_STATE, "text");
   m_dataMapper.addMapping(m_ui->m_sizeLabel, MessagesModel::COLUMN_MESSAGE_SIZE, "text");
   m_dataMapper.addMapping(m_ui->m_timeLabel, MessagesModel::COLUMN_DATE, "text");
   m_dataMapper.addMapping(m_ui->m_sentToLabel, MessagesModel::COLUMN_TO, "text");

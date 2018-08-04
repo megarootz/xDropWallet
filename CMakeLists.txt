@@ -331,3 +331,4 @@ elseif (WIN32)
 endif (APPLE)
 
 include(CPack)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON  )

@@ -1,7 +1,6 @@
 [submodule "libqrencode"]
 	path = libqrencode
 	url = https://github.com/fukuchi/libqrencode.git
-	branch = master
 [submodule "cryptonote"]
 	path = cryptonote
 	url = https://github.com/xDropProject/xDrop
